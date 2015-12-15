@@ -1,8 +1,10 @@
 # What is this
 
-Simple Ajax Helpers used in many Setelis projects.
+Simple Ajax Helpers used in many Setelis projects. You can see very basic demo here: http://setelis.github.io/angular-se-ajax/demo/
 
- - ```SEAJAX.stopEvent(event)``` - stop event propagation and default action
+ - Show loader when requests are made
+ - Prevent double click when POST/PUT/DELETE requests are made
+ - Show error notifications if request fails
 
  - TODO - add more info
 
