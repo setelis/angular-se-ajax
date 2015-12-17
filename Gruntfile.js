@@ -216,7 +216,7 @@ module.exports = function (grunt) {
 					browsers: getBrowsersForTest(),
 					/* coverage */
 					preprocessors: {
-						"<%= files.scripts %>": ["coverage"]
+						"src/**/*.js": ["coverage"]
 					},
 					// add the coverage plugin
 					plugins: [ "karma-jasmine", "karma-firefox-launcher", "karma-chrome-launcher", "karma-phantomjs-launcher", "karma-coverage", "karma-junit-reporter"],
