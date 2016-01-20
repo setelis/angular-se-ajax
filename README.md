@@ -50,6 +50,9 @@ Simple Ajax Helpers used in many Setelis projects. You can see very basic demo h
  - angular-se-notifications - ajax errors
  - jquery - jquery-ui
  - bootstrap, optional - notification baloon
+ - ui router - uses state name for ajax display request error
+ - angular translate - translate ajax errors
+ - lodash - restangular
 
 # For developers:
 # Setup

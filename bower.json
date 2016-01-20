@@ -1,10 +1,15 @@
 {
   "name": "angular-se-ajax",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
     "angular": "~1.4.3",
+    "angular-se-notifications": "~0.0.3",
+    "angular-translate": "~2.8.1",
+    "angular-ui-router": "~0.2.15",
+    "jquery": "~2.2.0",
     "jquery-ui": "~1.11.4",
-    "angular-se-notifications": "~0.0.3"
+    "lodash": "~4.0.0",
+    "restangular": "~1.5.1"
   },
   "devDependencies": {
     "angular-mocks": "~1.4.3",
@@ -16,16 +21,16 @@
   ],
   "description": "Simple Ajax Helpers used in many Setelis projects",
   "main": [
-     "src/seAjaxModule.js",
-     "src/seAjaxHelperService.js",
-     "src/seLoadingDirective.js",
-     "src/seAjaxRequestsSnifferService.js",
-     "src/seAjaxPreventDoubleClickService.js",
-     "src/seAjaxPreventCachingService.js",
-     "src/seAjaxDisplayRequestErrorsService.js",
-     "src/seAjaxTranslations.js",
-     "src/seAjaxTranslations.en.js",
-     "src/seAjaxTranslations.bg.js"
+    "src/seAjaxModule.js",
+    "src/seAjaxHelperService.js",
+    "src/seLoadingDirective.js",
+    "src/seAjaxRequestsSnifferService.js",
+    "src/seAjaxPreventDoubleClickService.js",
+    "src/seAjaxPreventCachingService.js",
+    "src/seAjaxDisplayRequestErrorsService.js",
+    "src/seAjaxTranslations.js",
+    "src/seAjaxTranslations.en.js",
+    "src/seAjaxTranslations.bg.js"
   ],
   "keywords": [
     "angular",

@@ -1,7 +1,9 @@
 //based on http://codingsmackdown.tv/blog/2013/04/20/using-response-interceptors-to-show-and-hide-a-loading-widget-redux/
+/*jshint -W072 */
 angular.module("seAjax.errors",
-	["seAjax.translations", "seAjax.sniffer", "seNotifications.service", "ui.router"]).service("SeAjaxDisplayRequestErrorsService",
-	function (SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService) {
+	["seAjax.translations", "seAjax.sniffer", "seNotifications.service", "ui.router", "restangular"]).service("SeAjaxDisplayRequestErrorsService",
+	function (SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService, $state, Restangular) {
+/*jshint +W072 */
 	"use strict";
 	var service = this;
 
@@ -22,13 +24,54 @@ angular.module("seAjax.errors",
 				translateOrNext(possibleTranslations);
 			});
 		}
+		function removeParameters(url) {
+			var index = url.lastIndexOf("?");
+			if (index === -1) {
+				return url;
+			}
+
+			return url.substring(0, index);
+		}
+		function getStrippedUrl(url) {
+			if (url.indexOf(Restangular.configuration.baseUrl) !== 0) {
+				return;
+			}
+			return url.substring(Restangular.configuration.baseUrl.length);
+		}
 		if (HIDDEN_ERROR_CODES.indexOf(errorResponse.status) !== -1) {
 			return;
 		}
 
-		var possibleTranslations = [
-			"httperrors." + errorResponse.status
-		];
+		var url = removeParameters(errorResponse.config.url);
+		var strippedUrl = getStrippedUrl(url);
+
+		var possibleTranslations;
+
+		// WARNING: if you update if part you should update else part, too!
+		if (strippedUrl) {
+			possibleTranslations = [
+				"httperrors."+errorResponse.config.method+".["+$state.current.name+"]."+errorResponse.status+"."+url,
+				"httperrors."+errorResponse.config.method+".["+$state.current.name+"]."+errorResponse.status+".~"+strippedUrl,
+				"httperrors."+errorResponse.config.method+"."+errorResponse.status+"."+url,
+				"httperrors."+errorResponse.config.method+"."+errorResponse.status+".~"+strippedUrl,
+				"httperrors."+errorResponse.config.method+"."+url,
+				"httperrors."+errorResponse.config.method+".~"+strippedUrl,
+				"httperrors." + errorResponse.status
+			];
+		} else {
+			// method full url code state
+			// method url code state
+			// method url code
+			// method url
+			// "/cashexpress/api/v1/authenticate?noCache=1453299840493"
+
+			possibleTranslations = [
+				"httperrors."+errorResponse.config.method+".["+$state.current.name+"]."+errorResponse.status+"."+url,
+				"httperrors."+errorResponse.config.method+"."+errorResponse.status+"."+url,
+				"httperrors."+errorResponse.config.method+"."+url,
+				"httperrors." + errorResponse.status
+			];
+		}
 		translateOrNext(possibleTranslations);
 	}
 
