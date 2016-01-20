@@ -12,9 +12,23 @@ module.exports = function(config) {
 
       // list of files / patterns to load in the browser
       files: [
+         "bower_components/jquery/dist/jquery.js",
          "bower_components/angular/angular.js",
          "bower_components/angular-mocks/angular-mocks.js",
+         "bower_components/angular-ui-router/release/angular-ui-router.js",
+         "bower_components/angular-translate/angular-translate.js",
+         "bower_components/lodash/lodash.js",
+         "bower_components/restangular/dist/restangular.js",
          "bower_components/angular-se-event-helper-service/src/seEventHelperService.js",
+         "bower_components/angular-se-notifications/src/seNotificationsModule.js",
+         "bower_components/angular-se-notifications/src/seNotificationsService.js",
+         "bower_components/angular-se-notifications/src/seNotificationsDirective.js",
+         "bower_components/angular-se-notifications/src/seNotificationsLoggerService.js",
+         "bower_components/angular-se-notifications/src/seNotificationsTranslations.bg.js",
+         "bower_components/angular-se-notifications/src/seNotificationsTranslations.en.js",
+         "bower_components/angular-se-notifications/src/seNotificationsTranslations.js",
+         "bower_components/angular-se-notifications/src/seNotificationsVersion.js",
+         "bower_components/angular-se-notifications/gen/seNotificationsHtml.js",
          "src/**/*.js",
          //"test/mock/**/*.js",
          "test/spec/**/*.js"

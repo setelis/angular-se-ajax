@@ -1,5 +1,6 @@
 //based on http://codingsmackdown.tv/blog/2013/04/20/using-response-interceptors-to-show-and-hide-a-loading-widget-redux/
-angular.module("seAjax.errors", ["seAjax.translations", "seAjax.sniffer", "seNotifications.service"]).service("SeAjaxDisplayRequestErrorsService",
+angular.module("seAjax.errors",
+	["seAjax.translations", "seAjax.sniffer", "seNotifications.service", "ui.router"]).service("SeAjaxDisplayRequestErrorsService",
 	function (SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService) {
 	"use strict";
 	var service = this;
@@ -9,18 +10,26 @@ angular.module("seAjax.errors", ["seAjax.translations", "seAjax.sniffer", "seNot
 	var HIDDEN_ERROR_CODES = [401, 403];
 
 	function postNotification(errorResponse) {
+		function translateOrNext(possibleTranslations) {
+			if (possibleTranslations.length === 0) {
+				SeNotificationsService.showNotificationError("httperrors.unknown");
+				return;
+			}
+			var next = possibleTranslations.shift();
+			$translate(next).then(function() {
+				SeNotificationsService.showNotificationError(next);
+			}, function() {
+				translateOrNext(possibleTranslations);
+			});
+		}
 		if (HIDDEN_ERROR_CODES.indexOf(errorResponse.status) !== -1) {
 			return;
 		}
 
-		var template = "httperrors." + errorResponse.status;
-
-		$translate(template).then(function() {
-			SeNotificationsService.showNotificationError(template);
-		}, function() {
-			template = "httperrors.unknown";
-			SeNotificationsService.showNotificationError(template);
-		});
+		var possibleTranslations = [
+			"httperrors." + errorResponse.status
+		];
+		translateOrNext(possibleTranslations);
 	}
 
 	service.$$init = function() {
