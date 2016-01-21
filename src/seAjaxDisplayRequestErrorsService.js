@@ -10,9 +10,6 @@ angular.module("seAjax.errors",
 	/*jshint +W072 */
 		var service = this;
 
-		// user is navigated to login, so it will be notified
-		// this should be moved to config section (hidden error codes to be configurable)
-		var HIDDEN_ERROR_CODES = [401, 403];
 		var PREFIX_STRIPPED_URL = "~";
 
 		function postNotification(errorResponse) {
@@ -57,9 +54,6 @@ angular.module("seAjax.errors",
 				});
 
 				return result;
-			}
-			if (HIDDEN_ERROR_CODES.indexOf(errorResponse.status) !== -1) {
-				return;
 			}
 
 			var url = processUrl(removeParameters(errorResponse.config.url));

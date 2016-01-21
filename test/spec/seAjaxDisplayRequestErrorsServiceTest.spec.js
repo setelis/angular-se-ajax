@@ -195,35 +195,13 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.UNKNOWN));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.UNKNOWN);
 		}));
-		it("should not display error on 401", inject(function () {
-			// should not be called:
-			$translate.and.callFake(function() {
-				expect(1).toBe(2);
-			});
-			translateCheck = function() {};
-
-			expect(SeAjaxRequestsSnifferService.onRequestError.calls.count()).toBe(1);
-
-			SeAjaxRequestsSnifferService.onRequestError.calls.first().args[1]({status: 401});
-			expect(SeNotificationsService.showNotificationError.calls.count()).toBe(0);
-			// translation:
-			$rootScope.$digest();
-			expect(SeNotificationsService.showNotificationError.calls.count()).toBe(0);
+		it("should display specific error if there is translation - 401", inject(function () {
+			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 401, EXPECTED_TRANSLATION.CODE));
+			expectBehaviour("GET", "http://mock.url/api/v1/members", 401, EXPECTED_TRANSLATION.CODE);
 		}));
-		it("should not display error on 403", inject(function () {
-			// should not be called:
-			$translate.and.callFake(function() {
-				expect(1).toBe(2);
-			});
-			translateCheck = function() {};
-
-			expect(SeAjaxRequestsSnifferService.onRequestError.calls.count()).toBe(1);
-
-			SeAjaxRequestsSnifferService.onRequestError.calls.first().args[1]({status: 403});
-			expect(SeNotificationsService.showNotificationError.calls.count()).toBe(0);
-			// translation:
-			$rootScope.$digest();
-			expect(SeNotificationsService.showNotificationError.calls.count()).toBe(0);
+		it("should display specific error if there is translation - 403", inject(function () {
+			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 403, EXPECTED_TRANSLATION.CODE));
+			expectBehaviour("GET", "http://mock.url/api/v1/members", 403, EXPECTED_TRANSLATION.CODE);
 		}));
 	});
 
