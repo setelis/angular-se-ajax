@@ -1,6 +1,6 @@
 {
   "name": "angular-se-ajax",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
     "angular": "~1.4.3",
     "angular-se-notifications": "~0.0.3",
