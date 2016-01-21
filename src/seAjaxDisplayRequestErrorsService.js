@@ -5,13 +5,15 @@ angular.module("seAjax.errors",
 	"use strict";
 	var provider = this;
 	/*jshint -W072 */
-	function SeAjaxDisplayRequestErrorsService(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService, $state, Restangular) {
+	function SeAjaxDisplayRequestErrorsService(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService,
+		$state, Restangular, effectiveOptions) {
 	/*jshint +W072 */
 		var service = this;
 
 		// user is navigated to login, so it will be notified
 		// this should be moved to config section (hidden error codes to be configurable)
 		var HIDDEN_ERROR_CODES = [401, 403];
+		var PREFIX_STRIPPED_URL = "~";
 
 		function postNotification(errorResponse) {
 			function translateOrNext(possibleTranslations) {
@@ -38,13 +40,29 @@ angular.module("seAjax.errors",
 				if (url.indexOf(Restangular.configuration.baseUrl) !== 0) {
 					return;
 				}
-				return url.substring(Restangular.configuration.baseUrl.length);
+				return PREFIX_STRIPPED_URL + url.substring(Restangular.configuration.baseUrl.length);
+			}
+			function processUrl(url) {
+				var strippedUrl = getStrippedUrl(url);
+				var result = url;
+				_.forEach(effectiveOptions.urlPatterns, function(nextValue) {
+					if (nextValue.pattern.test(url)) {
+						result = nextValue.newUrl;
+						return false;
+					}
+					if (strippedUrl && nextValue.pattern.test(strippedUrl)) {
+						result = "~" + nextValue.newUrl;
+						return false;
+					}
+				});
+
+				return result;
 			}
 			if (HIDDEN_ERROR_CODES.indexOf(errorResponse.status) !== -1) {
 				return;
 			}
 
-			var url = removeParameters(errorResponse.config.url);
+			var url = processUrl(removeParameters(errorResponse.config.url));
 			var strippedUrl = getStrippedUrl(url);
 
 			var possibleTranslations;
@@ -53,11 +71,11 @@ angular.module("seAjax.errors",
 			if (strippedUrl) {
 				possibleTranslations = [
 					"httperrors."+errorResponse.config.method+".["+$state.current.name+"]."+errorResponse.status+"."+url,
-					"httperrors."+errorResponse.config.method+".["+$state.current.name+"]."+errorResponse.status+".~"+strippedUrl,
+					"httperrors."+errorResponse.config.method+".["+$state.current.name+"]."+errorResponse.status+"."+strippedUrl,
 					"httperrors."+errorResponse.config.method+"."+errorResponse.status+"."+url,
-					"httperrors."+errorResponse.config.method+"."+errorResponse.status+".~"+strippedUrl,
+					"httperrors."+errorResponse.config.method+"."+errorResponse.status+"."+strippedUrl,
 					"httperrors."+errorResponse.config.method+"."+url,
-					"httperrors."+errorResponse.config.method+".~"+strippedUrl,
+					"httperrors."+errorResponse.config.method+"."+strippedUrl,
 					"httperrors." + errorResponse.status
 				];
 			} else {
@@ -81,11 +99,26 @@ angular.module("seAjax.errors",
 			SeAjaxRequestsSnifferService.onRequestError($rootScope, postNotification);
 		};
 	}
+
+	var DEFAULT_OPTIONS = {
+		urlPatterns: []
+	};
+	var customizedOptions;
+
+	provider.setCustomizedOptions = function(options) {
+		customizedOptions = options;
+	};
+	provider.getDefaultOptions = function() {
+		return angular.copy(DEFAULT_OPTIONS);
+	};
+
 	/*jshint -W072 */
 	provider.$get = ["SeAjaxRequestsSnifferService", "$rootScope", "$translate", "SeNotificationsService", "$state", "Restangular",
 		function SeAjaxDisplayRequestErrorsServiceFactory(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService, $state, Restangular) {
 	/*jshint +W072 */
-		return new SeAjaxDisplayRequestErrorsService(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService, $state, Restangular);
+		var effectiveOptions = _.assign({}, DEFAULT_OPTIONS, customizedOptions);
+		return new SeAjaxDisplayRequestErrorsService(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService,
+			$state, Restangular, effectiveOptions);
 	}];
 }).run(function(SeAjaxDisplayRequestErrorsService) {
 	"use strict";

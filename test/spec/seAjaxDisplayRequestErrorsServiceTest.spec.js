@@ -154,11 +154,31 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 
 		Restangular = {
 			configuration: {
-				baseUrl: "http://mock.url/api/v1/"
+				baseUrl: "http://mock.url/api/v1"
 			}
 		};
 		$provide.value("Restangular", Restangular);
 	}));
+	beforeEach(function() {
+		module(function(SeAjaxDisplayRequestErrorsServiceProvider) {
+			SeAjaxDisplayRequestErrorsServiceProvider.setCustomizedOptions({
+				urlPatterns: [
+					{
+						pattern: /^~\/members\/\d+\/changepassword$/,
+						newUrl: "/members/{memberId}/changepassword"
+					},
+					{
+						pattern: /^http:\/\/mock\.url\/api\/v1\/members\/\d+\/other$/,
+						newUrl: "http://mock.url/api/v1/members/{memberId}/other"
+					},
+					{
+						pattern: /^http:\/\/hello\.url\/api\/v1\/members\/\d+\/other$/,
+						newUrl: "http://hello.url/api/v1/members/{memberId}/other"
+					}
+				]
+			});
+		});
+	});
 	beforeEach(inject(function (_$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
@@ -211,11 +231,11 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 		it("method url state code", inject(function () {
 			configureTranslate([
 				{key: "httperrors.GET.[hello.state].405.http://mock.url/api/v1/members", reject: true},
-				{key: "httperrors.GET.[hello.state].405.~members", reject: true},
+				{key: "httperrors.GET.[hello.state].405.~/members", reject: true},
 				{key: "httperrors.GET.405.http://mock.url/api/v1/members", reject: true},
-				{key: "httperrors.GET.405.~members", reject: true},
+				{key: "httperrors.GET.405.~/members", reject: true},
 				{key: "httperrors.GET.http://mock.url/api/v1/members", reject: true},
-				{key: "httperrors.GET.~members", reject: true},
+				{key: "httperrors.GET.~/members", reject: true},
 				{key: "httperrors.405", reject: true}
 			]);
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.UNKNOWN);
@@ -223,11 +243,11 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 		it("method url state code - with params", inject(function () {
 			configureTranslate([
 				{key: "httperrors.GET.[hello.state].405.http://mock.url/api/v1/members", reject: true},
-				{key: "httperrors.GET.[hello.state].405.~members", reject: true},
+				{key: "httperrors.GET.[hello.state].405.~/members", reject: true},
 				{key: "httperrors.GET.405.http://mock.url/api/v1/members", reject: true},
-				{key: "httperrors.GET.405.~members", reject: true},
+				{key: "httperrors.GET.405.~/members", reject: true},
 				{key: "httperrors.GET.http://mock.url/api/v1/members", reject: true},
-				{key: "httperrors.GET.~members", reject: true},
+				{key: "httperrors.GET.~/members", reject: true},
 				{key: "httperrors.405", reject: true}
 			]);
 			expectBehaviour("GET", "http://mock.url/api/v1/members?hello=world", 405, EXPECTED_TRANSLATION.UNKNOWN);
@@ -252,6 +272,40 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL);
 		}));
+	});
+
+	describe("Display different errors depending on url and state name - support for parameters in url", function () {
+		it("partial url", inject(function () {
+			configureTranslate([
+				{key: "httperrors.GET.[hello.state].405.~/members/{memberId}/changepassword", reject: true},
+				{key: "httperrors.GET.405.~/members/{memberId}/changepassword", reject: true},
+				{key: "httperrors.GET.~/members/{memberId}/changepassword", reject: true},
+				{key: "httperrors.405", reject: true}
+			]);
+			expectBehaviour("GET", "http://mock.url/api/v1/members/55/changepassword", 405, EXPECTED_TRANSLATION.UNKNOWN);
+		}));
+		it("full url - as restangular", inject(function () {
+			configureTranslate([
+				{key: "httperrors.GET.[hello.state].405.http://mock.url/api/v1/members/{memberId}/other", reject: true},
+				{key: "httperrors.GET.[hello.state].405.~/members/{memberId}/other", reject: true},
+				{key: "httperrors.GET.405.http://mock.url/api/v1/members/{memberId}/other", reject: true},
+				{key: "httperrors.GET.405.~/members/{memberId}/other", reject: true},
+				{key: "httperrors.GET.http://mock.url/api/v1/members/{memberId}/other", reject: true},
+				{key: "httperrors.GET.~/members/{memberId}/other", reject: true},
+				{key: "httperrors.405", reject: true}
+			]);
+			expectBehaviour("GET", "http://mock.url/api/v1/members/55/other", 405, EXPECTED_TRANSLATION.UNKNOWN);
+		}));
+		it("full url - not as restangular", inject(function () {
+			configureTranslate([
+				{key: "httperrors.GET.[hello.state].405.http://hello.url/api/v1/members/{memberId}/other", reject: true},
+				{key: "httperrors.GET.405.http://hello.url/api/v1/members/{memberId}/other", reject: true},
+				{key: "httperrors.GET.http://hello.url/api/v1/members/{memberId}/other", reject: true},
+				{key: "httperrors.405", reject: true}
+			]);
+			expectBehaviour("GET", "http://hello.url/api/v1/members/55/other", 405, EXPECTED_TRANSLATION.UNKNOWN);
+		}));
 
 	});
+
 });
