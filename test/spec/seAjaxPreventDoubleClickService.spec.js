@@ -199,20 +199,20 @@ describe("SeAjaxPreventDoubleClickService", function () {
 	}));
 
 	describe("prevent blur on specific requests", function () {
-		it("restangularWithoutBlur should add http config to restangularizedElement", inject(function () {
+		it("restangularWithoutDoubleClickPrevention should add http config to restangularizedElement", inject(function () {
 			var restangularizedElement = jasmine.createSpyObj("restangularizedElement", ["withHttpConfig"]);
-			SeAjaxPreventDoubleClickService.restangularWithoutBlur(restangularizedElement);
+			SeAjaxPreventDoubleClickService.restangularWithoutDoubleClickPrevention(restangularizedElement);
 			expect(restangularizedElement.withHttpConfig.calls.count()).toBe(1);
 			expect(restangularizedElement.withHttpConfig.calls.first().args.length).toBe(1);
-			expect(restangularizedElement.withHttpConfig.calls.first().args[0]).toEqual({$$SeAjaxPreventDoubleClickService: {withoutBlur: true}});
+			expect(restangularizedElement.withHttpConfig.calls.first().args[0]).toEqual({$$SeAjaxPreventDoubleClickService: {withoutDoubleClickPrevention: true}});
 		}));
-		it("should not blur screen when withoutBlur is set - on success", inject(function () {
+		it("should not blur screen when withoutDoubleClickPrevention is set - on success", inject(function () {
 			expectNoAction();
 
 			SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({
 				method: "PUT",
 				$$SeAjaxPreventDoubleClickService: {
-					withoutBlur: true
+					withoutDoubleClickPrevention: true
 				}
 			});
 			expectNoAction();
@@ -220,19 +220,19 @@ describe("SeAjaxPreventDoubleClickService", function () {
 				config: {
 					method: "PUT",
 					$$SeAjaxPreventDoubleClickService: {
-						withoutBlur: true
+						withoutDoubleClickPrevention: true
 					}
 				}
 			});
 			expectNoAction();
 		}));
-		it("should not blur screen when withoutBlur is set - on error", inject(function () {
+		it("should not blur screen when withoutDoubleClickPrevention is set - on error", inject(function () {
 			expectNoAction();
 
 			SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({
 				method: "PUT",
 				$$SeAjaxPreventDoubleClickService: {
-					withoutBlur: true
+					withoutDoubleClickPrevention: true
 				}
 			});
 			expectNoAction();
@@ -240,7 +240,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 				config: {
 					method: "PUT",
 					$$SeAjaxPreventDoubleClickService: {
-						withoutBlur: true
+						withoutDoubleClickPrevention: true
 					}
 				}
 			});

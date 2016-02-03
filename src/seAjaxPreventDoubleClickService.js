@@ -36,20 +36,20 @@ angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventD
 			modal.dialog("close");
 			modal = null;
 		}
-		function isRequestWithoutBlur(config) {
-			if (config.$$SeAjaxPreventDoubleClickService && config.$$SeAjaxPreventDoubleClickService.withoutBlur === true) {
+		function isRequestWithoutDoubleClickPrevention(config) {
+			if (config.$$SeAjaxPreventDoubleClickService && config.$$SeAjaxPreventDoubleClickService.withoutDoubleClickPrevention === true) {
 				return true;
 			}
 			return false;
 		}
 		function checkRequestStarted(config) {
-			if (config.method === "GET" || isRequestWithoutBlur(config)) {
+			if (config.method === "GET" || isRequestWithoutDoubleClickPrevention(config)) {
 				return;
 			}
 			service.requestStarted();
 		}
 		function checkRequestEnded(response) {
-			if ((response.config && response.config.method === "GET") || isRequestWithoutBlur(response.config)) {
+			if ((response.config && response.config.method === "GET") || isRequestWithoutDoubleClickPrevention(response.config)) {
 				return;
 			}
 			service.requestEnded();
@@ -84,8 +84,8 @@ angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventD
 		SeAjaxRequestsSnifferService.onRequestError($rootScope, checkRequestEnded);
 	};
 
-	service.restangularWithoutBlur = function(restangularizedElement) {
-		return restangularizedElement.withHttpConfig({$$SeAjaxPreventDoubleClickService: {withoutBlur: true}});
+	service.restangularWithoutDoubleClickPrevention = function(restangularizedElement) {
+		return restangularizedElement.withHttpConfig({$$SeAjaxPreventDoubleClickService: {withoutDoubleClickPrevention: true}});
 	};
 }).run(function(SeAjaxPreventDoubleClickService) {
 	"use strict";
