@@ -197,4 +197,55 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		SeAjaxRequestsSnifferService.onRequestSuccess.calls.first().args[1]({config: {method: "GET"}});
 		expectNoAction();
 	}));
+
+	describe("prevent blur on specific requests", function () {
+		it("restangularWithoutBlur should add http config to restangularizedElement", inject(function () {
+			var restangularizedElement = jasmine.createSpyObj("restangularizedElement", ["withHttpConfig"]);
+			SeAjaxPreventDoubleClickService.restangularWithoutBlur(restangularizedElement);
+			expect(restangularizedElement.withHttpConfig.calls.count()).toBe(1);
+			expect(restangularizedElement.withHttpConfig.calls.first().args.length).toBe(1);
+			expect(restangularizedElement.withHttpConfig.calls.first().args[0]).toEqual({$$SeAjaxPreventDoubleClickService: {withoutBlur: true}});
+		}));
+		it("should not blur screen when withoutBlur is set - on success", inject(function () {
+			expectNoAction();
+
+			SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({
+				method: "PUT",
+				$$SeAjaxPreventDoubleClickService: {
+					withoutBlur: true
+				}
+			});
+			expectNoAction();
+			SeAjaxRequestsSnifferService.onRequestSuccess.calls.first().args[1]({
+				config: {
+					method: "PUT",
+					$$SeAjaxPreventDoubleClickService: {
+						withoutBlur: true
+					}
+				}
+			});
+			expectNoAction();
+		}));
+		it("should not blur screen when withoutBlur is set - on error", inject(function () {
+			expectNoAction();
+
+			SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({
+				method: "PUT",
+				$$SeAjaxPreventDoubleClickService: {
+					withoutBlur: true
+				}
+			});
+			expectNoAction();
+			SeAjaxRequestsSnifferService.onRequestError.calls.first().args[1]({
+				config: {
+					method: "PUT",
+					$$SeAjaxPreventDoubleClickService: {
+						withoutBlur: true
+					}
+				}
+			});
+			expectNoAction();
+		}));
+
+	});
 });
