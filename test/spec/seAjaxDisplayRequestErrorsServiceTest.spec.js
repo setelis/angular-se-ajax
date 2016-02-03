@@ -126,7 +126,7 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			}
 		});
 		expect(SeNotificationsService.showNotificationError.calls.count()).toBe(1);
-		expect(SeNotificationsService.showNotificationError.calls.first().args.length).toBe(1);
+		expect(SeNotificationsService.showNotificationError.calls.first().args.length).toBe(4);
 		var expectedCall = expectedTranslation.generate(method, url, statusCode);
 		expect(SeNotificationsService.showNotificationError.calls.first().args[0]).toBe(expectedCall);
 	}
