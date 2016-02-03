@@ -13,16 +13,16 @@ angular.module("seAjax.errors",
 		var PREFIX_STRIPPED_URL = "~";
 
 		function postNotification(errorResponse) {
-			function translateOrNext(possibleTranslations) {
+			function translateOrNext(errorResponse, possibleTranslations) {
 				if (possibleTranslations.length === 0) {
-					SeNotificationsService.showNotificationError("httperrors.unknown");
+					SeNotificationsService.showNotificationError("httperrors.unknown", null, null, angular.toJson(errorResponse));
 					return;
 				}
 				var next = possibleTranslations.shift();
 				$translate(next).then(function() {
-					SeNotificationsService.showNotificationError(next);
+					SeNotificationsService.showNotificationError(next, null, null, angular.toJson(errorResponse));
 				}, function() {
-					translateOrNext(possibleTranslations);
+					translateOrNext(errorResponse, possibleTranslations);
 				});
 			}
 			function removeParameters(url) {
@@ -87,7 +87,7 @@ angular.module("seAjax.errors",
 					"httperrors." + errorResponse.status
 				];
 			}
-			translateOrNext(possibleTranslations);
+			translateOrNext(errorResponse, possibleTranslations);
 		}
 
 		service.$$init = function() {
