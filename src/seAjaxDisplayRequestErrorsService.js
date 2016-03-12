@@ -13,6 +13,13 @@ angular.module("seAjax.errors",
 		var PREFIX_STRIPPED_URL = "~";
 
 		function postNotification(errorResponse) {
+			function shouldSkipAjaxError(config) {
+				if (config.$$SeAjaxDisplayRequestErrorsService && config.$$SeAjaxDisplayRequestErrorsService.restangularSkipAjaxError === true) {
+					return true;
+				}
+				return false;
+			}
+
 			function translateOrNext(errorResponse, possibleTranslations) {
 				if (possibleTranslations.length === 0) {
 					SeNotificationsService.showNotificationError("httperrors.unknown", null, null, angular.toJson(errorResponse));
@@ -56,6 +63,10 @@ angular.module("seAjax.errors",
 				return result;
 			}
 
+			if (shouldSkipAjaxError(errorResponse.config)) {
+				return;
+			}
+
 			var url = processUrl(removeParameters(errorResponse.config.url));
 			var strippedUrl = getStrippedUrl(url);
 
@@ -92,6 +103,9 @@ angular.module("seAjax.errors",
 
 		service.$$init = function() {
 			SeAjaxRequestsSnifferService.onRequestError($rootScope, postNotification);
+		};
+		service.restangularSkipAjaxError = function(restangularizedElement) {
+			return restangularizedElement.withHttpConfig({$$SeAjaxDisplayRequestErrorsService: {restangularSkipAjaxError: true}});
 		};
 	}
 

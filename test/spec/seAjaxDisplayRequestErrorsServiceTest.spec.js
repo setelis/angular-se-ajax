@@ -184,7 +184,9 @@ describe("SeAjaxDisplayRequestErrorsService", function() {
 		$rootScope = _$rootScope_;
 	}));
 	afterEach(inject(function() {
-		translateCheck();
+		if (translateCheck) {
+			translateCheck();
+		}
 	}));
 	describe("Common scenario", function() {
 		it("should display specific error if there is translation", inject(function() {
@@ -282,6 +284,41 @@ describe("SeAjaxDisplayRequestErrorsService", function() {
 				{key: "httperrors.405", reject: true}
 			]);
 			expectBehaviour("GET", "http://hello.url/api/v1/members/55/other", 405, EXPECTED_TRANSLATION.UNKNOWN);
+		}));
+	});
+	describe("restangularSkipAjaxError", function() {
+		it("should check restangularSkipAjaxError", inject(function() {
+			expect(SeAjaxRequestsSnifferService.onRequestError.calls.count()).toBe(1);
+
+			expect($translate.calls.count()).toBe(0);
+
+			SeAjaxRequestsSnifferService.onRequestError.calls.first().args[1]({
+				status: 300,
+				config: {
+					method: "POST",
+					url: "hello",
+					$$SeAjaxDisplayRequestErrorsService: {
+						restangularSkipAjaxError: true
+					}
+				}
+			});
+			for (var i = 0; i < 30; i++) {
+				$rootScope.$digest();
+			}
+
+			expect(SeNotificationsService.showNotificationError.calls.count()).toBe(0);
+			expect($translate.calls.count()).toBe(0);
+		}));
+
+		it("should set restangularSkipAjaxError", inject(function(SeAjaxDisplayRequestErrorsService) {
+			var restangularizedElement = jasmine.createSpyObj("restangularizedElement", ["withHttpConfig"]);
+			expect(restangularizedElement.withHttpConfig.calls.count()).toBe(0);
+			SeAjaxDisplayRequestErrorsService.restangularSkipAjaxError(restangularizedElement);
+			expect(restangularizedElement.withHttpConfig.calls.count()).toBe(1);
+			expect(restangularizedElement.withHttpConfig.calls.first().args[0]).toEqual({
+				$$SeAjaxDisplayRequestErrorsService: {restangularSkipAjaxError: true}
+			});
+			expect(restangularizedElement.withHttpConfig.calls.first().args.length).toBe(1);
 		}));
 
 	});
