@@ -1,13 +1,13 @@
 //based on http://codingsmackdown.tv/blog/2013/04/20/using-response-interceptors-to-show-and-hide-a-loading-widget-redux/
 // http://stackoverflow.com/questions/16098430/angular-ie-caching-issue-for-http
-angular.module("seAjax.caching", ["seAjax.sniffer", "restangular"]).service("SeAjaxPreventCachingService", function (SeAjaxRequestsSnifferService, $rootScope, Restangular) {
+angular.module("seAjax.caching", ["seAjax.sniffer", "restangular"]).service("SeAjaxPreventCachingService", function(SeAjaxRequestsSnifferService, $rootScope, Restangular) {
 	"use strict";
 	var service = this;
 
 	service.$$init = function() {
 		SeAjaxRequestsSnifferService.onRequestStarted($rootScope, function(config) {
 			// because IE caches GET requests and user is not logged in or not logged out
-			if(config.method === "GET" && config.url.indexOf(Restangular.configuration.baseUrl) > -1) {
+			if (config.method === "GET" && config.url.indexOf(Restangular.configuration.baseUrl) > -1) {
 				var separator = config.url.indexOf("?") === -1 ? "?" : "&";
 				config.url = config.url + separator + "noCache=" + new Date().getTime();
 			}
@@ -18,7 +18,7 @@ angular.module("seAjax.caching", ["seAjax.sniffer", "restangular"]).service("SeA
 	"use strict";
 
 	SeAjaxPreventCachingService.$$init();
-}).config(function ($httpProvider) {
+}).config(function($httpProvider) {
 	"use strict";
 
 	//http://www.oodlestechnologies.com/blogs/AngularJS-caching-issue-for-Internet-Explorer

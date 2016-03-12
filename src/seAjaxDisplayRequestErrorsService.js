@@ -7,7 +7,7 @@ angular.module("seAjax.errors",
 	/*jshint -W072 */
 	function SeAjaxDisplayRequestErrorsService(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService,
 		$injector, Restangular, effectiveOptions) {
-	/*jshint +W072 */
+		/*jshint +W072 */
 		var service = this;
 
 		var PREFIX_STRIPPED_URL = "~";
@@ -65,12 +65,12 @@ angular.module("seAjax.errors",
 			// WARNING: if you update if part you should update else part, too!
 			if (strippedUrl) {
 				possibleTranslations = [
-					"httperrors."+errorResponse.config.method+".["+currentStateName+"]."+errorResponse.status+"."+url,
-					"httperrors."+errorResponse.config.method+".["+currentStateName+"]."+errorResponse.status+"."+strippedUrl,
-					"httperrors."+errorResponse.config.method+"."+errorResponse.status+"."+url,
-					"httperrors."+errorResponse.config.method+"."+errorResponse.status+"."+strippedUrl,
-					"httperrors."+errorResponse.config.method+"."+url,
-					"httperrors."+errorResponse.config.method+"."+strippedUrl,
+					"httperrors." + errorResponse.config.method + ".[" + currentStateName + "]." + errorResponse.status + "." + url,
+					"httperrors." + errorResponse.config.method + ".[" + currentStateName + "]." + errorResponse.status + "." + strippedUrl,
+					"httperrors." + errorResponse.config.method + "." + errorResponse.status + "." + url,
+					"httperrors." + errorResponse.config.method + "." + errorResponse.status + "." + strippedUrl,
+					"httperrors." + errorResponse.config.method + "." + url,
+					"httperrors." + errorResponse.config.method + "." + strippedUrl,
 					"httperrors." + errorResponse.status
 				];
 			} else {
@@ -81,9 +81,9 @@ angular.module("seAjax.errors",
 				// "/cashexpress/api/v1/authenticate?noCache=1453299840493"
 
 				possibleTranslations = [
-					"httperrors."+errorResponse.config.method+".["+currentStateName+"]."+errorResponse.status+"."+url,
-					"httperrors."+errorResponse.config.method+"."+errorResponse.status+"."+url,
-					"httperrors."+errorResponse.config.method+"."+url,
+					"httperrors." + errorResponse.config.method + ".[" + currentStateName + "]." + errorResponse.status + "." + url,
+					"httperrors." + errorResponse.config.method + "." + errorResponse.status + "." + url,
+					"httperrors." + errorResponse.config.method + "." + url,
 					"httperrors." + errorResponse.status
 				];
 			}
@@ -110,7 +110,7 @@ angular.module("seAjax.errors",
 	/*jshint -W072 */
 	provider.$get = ["SeAjaxRequestsSnifferService", "$rootScope", "$translate", "SeNotificationsService", "$injector", "Restangular",
 		function SeAjaxDisplayRequestErrorsServiceFactory(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService, $injector, Restangular) {
-	/*jshint +W072 */
+		/*jshint +W072 */
 		var effectiveOptions = _.assign({}, DEFAULT_OPTIONS, customizedOptions);
 		return new SeAjaxDisplayRequestErrorsService(SeAjaxRequestsSnifferService, $rootScope, $translate, SeNotificationsService,
 			$injector, Restangular, effectiveOptions);

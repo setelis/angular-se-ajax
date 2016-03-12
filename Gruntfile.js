@@ -38,13 +38,15 @@ module.exports = function (grunt) {
 					"karma:unit",
 					// "htmlangular:index",
 					// "htmlangular:continuous",
-					"flow:app"
+					"flow:app",
+					"jscs"
 				];
 			} else {
 				return [
 					"jshint",
 					"karma:unit",
-					"flow:app"
+					"flow:app",
+					"jscs"
 				];
 			}
 		}
@@ -65,7 +67,7 @@ module.exports = function (grunt) {
 			watch: {
 				js: {
 					files: ["<%= files.scripts %>"],
-					tasks: ["newer:jshint:all", "karma:continuous", "flow:app"],
+					tasks: ["newer:jshint:all", "karma:continuous", "flow:app", "jscs:appScripts"],
 					options: {
 						event: ["changed", "added", "deleted"],
 						livereload: true
@@ -81,7 +83,7 @@ module.exports = function (grunt) {
 				},
 				jsUnitTest: {
 					files: ["<%= files.unittests %>"],
-					tasks: ["newer:jshint:test", "karma:continuous"],
+					tasks: ["newer:jshint:test", "karma:continuous", "jscs:appScripts"],
 					options: {
 						event: ["changed", "added", "deleted"]
 					}
@@ -113,6 +115,14 @@ module.exports = function (grunt) {
 						jshintrc: "test/.jshintrc"
 					},
 					src: ["<%= files.unittests %>"]
+				}
+			},
+			jscs: {
+				appScripts: {
+					src: "<%= files.scripts %>"
+				},
+				tests: {
+					src: "<%= files.unittests %>"
 				}
 			},
 			// Empties folders to start fresh

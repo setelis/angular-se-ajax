@@ -6,7 +6,7 @@ angular.module("seAjax.helper", ["restangular"]).service("SeAjaxHelperService", 
 	function attachMethods() {
 		service.restangularChild = function(parent, childName, method) {
 			var endpoint = parent.one(childName);
-			return endpoint[method||"get"]().then(function(response) {
+			return endpoint[method || "get"]().then(function(response) {
 				return service.fixRestangularUrl(response, endpoint);
 			});
 		};

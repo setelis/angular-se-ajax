@@ -6,7 +6,7 @@ angular.module("seAjax.translations.en", ["pascalprecht.translate"]).config(func
 		"httperrors.403": "Access denied.",
 		"httperrors.404": "Not found.",
 		"httperrors.500": "Server error, refresh the page, please.",
-		"httperrors.0" : "Check the Internet conectivity.",
+		"httperrors.0": "Check the Internet conectivity.",
 		"httperrors.unknown": "Unknown error, refresh the page, please."
 	});
 });

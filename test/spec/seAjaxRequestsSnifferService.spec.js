@@ -1,10 +1,10 @@
-describe("SeAjaxRequestsSnifferService", function () {
+describe("SeAjaxRequestsSnifferService", function() {
 	"use strict";
 	beforeEach(module("seAjax.sniffer"));
 
 	var scope, $rootScope, SeAjaxRequestsSnifferService, handler;
 
-	beforeEach(inject(function (_$rootScope_, _SeAjaxRequestsSnifferService_) {
+	beforeEach(inject(function(_$rootScope_, _SeAjaxRequestsSnifferService_) {
 		$rootScope = _$rootScope_;
 		SeAjaxRequestsSnifferService = _SeAjaxRequestsSnifferService_;
 		spyOn($rootScope, "$broadcast");
@@ -12,24 +12,24 @@ describe("SeAjaxRequestsSnifferService", function () {
 		handler = jasmine.createSpy("handler");
 	}));
 
-	it("should receive start request broadcasts", inject(function () {
+	it("should receive start request broadcasts", inject(function() {
 		testCallbacks(SeAjaxRequestsSnifferService.onRequestStarted, "$$SeAjaxRequestsSnifferService_START_REQUEST_");
 	}));
 
-	it("should receive success end request broadcasts", inject(function () {
+	it("should receive success end request broadcasts", inject(function() {
 		testCallbacks(SeAjaxRequestsSnifferService.onRequestSuccess, "$$SeAjaxRequestsSnifferService_END_REQUEST_SUCCESS_");
 	}));
-	it("should receive failure end request broadcasts", inject(function () {
+	it("should receive failure end request broadcasts", inject(function() {
 		testCallbacks(SeAjaxRequestsSnifferService.onRequestError, "$$SeAjaxRequestsSnifferService_END_REQUEST_ERROR_");
 	}));
 
-	it("should fire start request broadcast", inject(function () {
+	it("should fire start request broadcast", inject(function() {
 		testBroadcasts(SeAjaxRequestsSnifferService.$$requestStarted, "$$SeAjaxRequestsSnifferService_START_REQUEST_");
 	}));
-	it("should fire success end request broadcast", inject(function () {
+	it("should fire success end request broadcast", inject(function() {
 		testBroadcasts(SeAjaxRequestsSnifferService.$$requestSuccess, "$$SeAjaxRequestsSnifferService_END_REQUEST_SUCCESS_");
 	}));
-	it("should fire failure end request broadcast", inject(function () {
+	it("should fire failure end request broadcast", inject(function() {
 		testBroadcasts(SeAjaxRequestsSnifferService.$$requestError, "$$SeAjaxRequestsSnifferService_END_REQUEST_ERROR_");
 	}));
 
@@ -49,13 +49,11 @@ describe("SeAjaxRequestsSnifferService", function () {
 
 		expect(handler.calls.any()).toBe(false);
 
-
 		var wrappedHandler = scope.$on.calls.first().args[1];
 		var args = {some: "oth"};
 		wrappedHandler(null, args);
 		expect(handler.calls.count()).toBe(1);
 		expect(handler).toHaveBeenCalledWith(args);
 	}
-
 
 });

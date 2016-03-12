@@ -1,6 +1,6 @@
 //based on http://codingsmackdown.tv/blog/2013/04/20/using-response-interceptors-to-show-and-hide-a-loading-widget-redux/
 // blur is based on http://stackoverflow.com/questions/9416556/jquery-how-to-disable-the-entire-page
-angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventDoubleClickService", function (SeAjaxRequestsSnifferService, $rootScope) {
+angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventDoubleClickService", function(SeAjaxRequestsSnifferService, $rootScope) {
 	"use strict";
 	var service = this;
 

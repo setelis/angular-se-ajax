@@ -1,4 +1,4 @@
-describe("SeAjaxPreventDoubleClickService", function () {
+describe("SeAjaxPreventDoubleClickService", function() {
 	"use strict";
 	var SeAjaxPreventDoubleClickService, SeAjaxRequestsSnifferService;
 	var mockedDialog;
@@ -38,12 +38,12 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		mockedDialog.dialog.calls.reset();
 	}
 
-	beforeEach(module("seAjax.doubleclick", function($provide){
+	beforeEach(module("seAjax.doubleclick", function($provide) {
 		SeAjaxRequestsSnifferService = jasmine.createSpyObj("SeAjaxRequestsSnifferService", ["onRequestStarted", "onRequestSuccess", "onRequestError"]);
 		$provide.value("SeAjaxRequestsSnifferService", SeAjaxRequestsSnifferService);
 	}));
 
-	beforeEach(inject(function (_SeAjaxPreventDoubleClickService_) {
+	beforeEach(inject(function(_SeAjaxPreventDoubleClickService_) {
 		SeAjaxPreventDoubleClickService = _SeAjaxPreventDoubleClickService_;
 	}));
 
@@ -52,12 +52,12 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		mockedDialog = jasmine.createSpyObj("mockedDialog", ["dialog"]);
 		$.fn.dialog.and.returnValue(mockedDialog);
 	});
-	it("should register for requests", inject(function () {
+	it("should register for requests", inject(function() {
 		expect(SeAjaxRequestsSnifferService.onRequestStarted.calls.count()).toBe(1);
 		expect(SeAjaxRequestsSnifferService.onRequestSuccess.calls.count()).toBe(1);
 		expect(SeAjaxRequestsSnifferService.onRequestError.calls.count()).toBe(1);
 	}));
-	it("should disable button on PUT and reenable on success", inject(function () {
+	it("should disable button on PUT and reenable on success", inject(function() {
 		expectNoAction();
 
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "PUT"});
@@ -65,7 +65,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		SeAjaxRequestsSnifferService.onRequestSuccess.calls.first().args[1]({config: {method: "PUT"}});
 		expectReenabledInput();
 	}));
-	it("should disable button on PUT and reenable on error", inject(function () {
+	it("should disable button on PUT and reenable on error", inject(function() {
 		expectNoAction();
 
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "PUT"});
@@ -73,7 +73,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		SeAjaxRequestsSnifferService.onRequestError.calls.first().args[1]({config: {method: "PUT"}});
 		expectReenabledInput();
 	}));
-	it("should not disable button on GET", inject(function () {
+	it("should not disable button on GET", inject(function() {
 		expectNoAction();
 
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "GET"});
@@ -81,7 +81,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		SeAjaxRequestsSnifferService.onRequestError.calls.first().args[1]({config: {method: "GET"}});
 		expectNoAction();
 	}));
-	it("should handle two requests at a time - two success", inject(function () {
+	it("should handle two requests at a time - two success", inject(function() {
 		expectNoAction();
 
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "PUT"});
@@ -102,7 +102,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		expectReenabledInput();
 	}));
 
-	it("should handle two requests at a time - second error success", inject(function () {
+	it("should handle two requests at a time - second error success", inject(function() {
 		expectNoAction();
 
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "PUT"});
@@ -123,7 +123,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		expectReenabledInput();
 	}));
 
-	it("should handle two requests at a time - second error success but first come", inject(function () {
+	it("should handle two requests at a time - second error success but first come", inject(function() {
 		expectNoAction();
 
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "PUT"});
@@ -143,7 +143,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		expectReenabledInput();
 	}));
 
-	it("should handle two requests at a time - two success - last get", inject(function () {
+	it("should handle two requests at a time - two success - last get", inject(function() {
 		expectNoAction();
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "PUT"});
 		expectDisabledInput();
@@ -162,7 +162,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		expectNoAction();
 	}));
 
-	it("should handle two requests at a time - second error success - last get", inject(function () {
+	it("should handle two requests at a time - second error success - last get", inject(function() {
 		expectNoAction();
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "PUT"});
 		expectDisabledInput();
@@ -179,7 +179,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		expectNoAction();
 	}));
 
-	it("should handle two requests at a time - second error success but first come - last get", inject(function () {
+	it("should handle two requests at a time - second error success but first come - last get", inject(function() {
 		expectNoAction();
 		SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({method: "GET"});
 		expectNoAction();
@@ -198,15 +198,15 @@ describe("SeAjaxPreventDoubleClickService", function () {
 		expectNoAction();
 	}));
 
-	describe("prevent blur on specific requests", function () {
-		it("restangularWithoutDoubleClickPrevention should add http config to restangularizedElement", inject(function () {
+	describe("prevent blur on specific requests", function() {
+		it("restangularWithoutDoubleClickPrevention should add http config to restangularizedElement", inject(function() {
 			var restangularizedElement = jasmine.createSpyObj("restangularizedElement", ["withHttpConfig"]);
 			SeAjaxPreventDoubleClickService.restangularWithoutDoubleClickPrevention(restangularizedElement);
 			expect(restangularizedElement.withHttpConfig.calls.count()).toBe(1);
 			expect(restangularizedElement.withHttpConfig.calls.first().args.length).toBe(1);
 			expect(restangularizedElement.withHttpConfig.calls.first().args[0]).toEqual({$$SeAjaxPreventDoubleClickService: {withoutDoubleClickPrevention: true}});
 		}));
-		it("should not blur screen when withoutDoubleClickPrevention is set - on success", inject(function () {
+		it("should not blur screen when withoutDoubleClickPrevention is set - on success", inject(function() {
 			expectNoAction();
 
 			SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({
@@ -226,7 +226,7 @@ describe("SeAjaxPreventDoubleClickService", function () {
 			});
 			expectNoAction();
 		}));
-		it("should not blur screen when withoutDoubleClickPrevention is set - on error", inject(function () {
+		it("should not blur screen when withoutDoubleClickPrevention is set - on error", inject(function() {
 			expectNoAction();
 
 			SeAjaxRequestsSnifferService.onRequestStarted.calls.first().args[1]({

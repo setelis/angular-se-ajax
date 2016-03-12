@@ -1,4 +1,4 @@
-describe("SeAjaxDisplayRequestErrorsService", function () {
+describe("SeAjaxDisplayRequestErrorsService", function() {
 	"use strict";
 	var EXPECTED_TRANSLATION = {
 		UNKNOWN: {
@@ -10,43 +10,43 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 		CODE: {
 			name: "CODE",
 			generate: function(method, url, statusCode) {
-				return "httperrors."+statusCode;
+				return "httperrors." + statusCode;
 			}
 		},
 		METHOD_STRIPPED_URL: {
 			name: "METHOD_STRIPPED_URL",
 			generate: function(method, url) {
-				return "httperrors."+method+".~"+url.substring(Restangular.configuration.baseUrl.length);
+				return "httperrors." + method + ".~" + url.substring(Restangular.configuration.baseUrl.length);
 			}
 		},
 		METHOD_URL: {
 			name: "METHOD_URL",
 			generate: function(method, url) {
-				return "httperrors."+method+"."+url;
+				return "httperrors." + method + "." + url;
 			}
 		},
 		METHOD_STRIPPED_URL_CODE: {
 			name: "METHOD_STRIPPED_URL_CODE",
 			generate: function(method, url, statusCode) {
-				return "httperrors."+method+"."+statusCode+".~"+url.substring(Restangular.configuration.baseUrl.length);
+				return "httperrors." + method + "." + statusCode + ".~" + url.substring(Restangular.configuration.baseUrl.length);
 			}
 		},
 		METHOD_URL_CODE: {
 			name: "METHOD_URL_CODE",
 			generate: function(method, url, statusCode) {
-				return "httperrors."+method+"."+statusCode+"."+url;
+				return "httperrors." + method + "." + statusCode + "." + url;
 			}
 		},
 		METHOD_STRIPPED_URL_CODE_STATE: {
 			name: "METHOD_STRIPPED_URL_CODE_STATE",
 			generate: function(method, url, statusCode) {
-				return "httperrors."+method+".[hello.state]."+statusCode+".~"+url.substring(Restangular.configuration.baseUrl.length);
+				return "httperrors." + method + ".[hello.state]." + statusCode + ".~" + url.substring(Restangular.configuration.baseUrl.length);
 			}
 		},
 		METHOD_URL_CODE_STATE: {
 			name: "METHOD_URL_CODE_STATE",
 			generate: function(method, url, statusCode) {
-				return "httperrors."+method+".[hello.state]."+statusCode+"."+url;
+				return "httperrors." + method + ".[hello.state]." + statusCode + "." + url;
 			}
 		}
 	};
@@ -179,34 +179,34 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			});
 		});
 	});
-	beforeEach(inject(function (_$q_, _$rootScope_) {
+	beforeEach(inject(function(_$q_, _$rootScope_) {
 		$q = _$q_;
 		$rootScope = _$rootScope_;
 	}));
-	afterEach(inject(function () {
+	afterEach(inject(function() {
 		translateCheck();
 	}));
-	describe("Common scenario", function () {
-		it("should display specific error if there is translation", inject(function () {
+	describe("Common scenario", function() {
+		it("should display specific error if there is translation", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.CODE));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.CODE);
 		}));
-		it("should display generic error if there is no translation", inject(function () {
+		it("should display generic error if there is no translation", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.UNKNOWN));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.UNKNOWN);
 		}));
-		it("should display specific error if there is translation - 401", inject(function () {
+		it("should display specific error if there is translation - 401", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 401, EXPECTED_TRANSLATION.CODE));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 401, EXPECTED_TRANSLATION.CODE);
 		}));
-		it("should display specific error if there is translation - 403", inject(function () {
+		it("should display specific error if there is translation - 403", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 403, EXPECTED_TRANSLATION.CODE));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 403, EXPECTED_TRANSLATION.CODE);
 		}));
 	});
 
-	describe("Display different errors depending on url and state name", function () {
-		it("method url state code", inject(function () {
+	describe("Display different errors depending on url and state name", function() {
+		it("method url state code", inject(function() {
 			configureTranslate([
 				{key: "httperrors.GET.[hello.state].405.http://mock.url/api/v1/members", reject: true},
 				{key: "httperrors.GET.[hello.state].405.~/members", reject: true},
@@ -218,7 +218,7 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			]);
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.UNKNOWN);
 		}));
-		it("method url state code - with params", inject(function () {
+		it("method url state code - with params", inject(function() {
 			configureTranslate([
 				{key: "httperrors.GET.[hello.state].405.http://mock.url/api/v1/members", reject: true},
 				{key: "httperrors.GET.[hello.state].405.~/members", reject: true},
@@ -230,30 +230,30 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			]);
 			expectBehaviour("GET", "http://mock.url/api/v1/members?hello=world", 405, EXPECTED_TRANSLATION.UNKNOWN);
 		}));
-		it("method url state code", inject(function () {
+		it("method url state code", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL_CODE_STATE));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL_CODE_STATE);
 		}));
-		it("method stripped url state code", inject(function () {
+		it("method stripped url state code", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_STRIPPED_URL_CODE_STATE));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_STRIPPED_URL_CODE_STATE);
 		}));
-		it("method url state code", inject(function () {
+		it("method url state code", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL_CODE_STATE));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL_CODE_STATE);
 		}));
-		it("method url code", inject(function () {
+		it("method url code", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL_CODE));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL_CODE);
 		}));
-		it("method url", inject(function () {
+		it("method url", inject(function() {
 			configureTranslate(generateTranslations("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL));
 			expectBehaviour("GET", "http://mock.url/api/v1/members", 405, EXPECTED_TRANSLATION.METHOD_URL);
 		}));
 	});
 
-	describe("Display different errors depending on url and state name - support for parameters in url", function () {
-		it("partial url", inject(function () {
+	describe("Display different errors depending on url and state name - support for parameters in url", function() {
+		it("partial url", inject(function() {
 			configureTranslate([
 				{key: "httperrors.GET.[hello.state].405.~/members/{memberId}/changepassword", reject: true},
 				{key: "httperrors.GET.405.~/members/{memberId}/changepassword", reject: true},
@@ -262,7 +262,7 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			]);
 			expectBehaviour("GET", "http://mock.url/api/v1/members/55/changepassword", 405, EXPECTED_TRANSLATION.UNKNOWN);
 		}));
-		it("full url - as restangular", inject(function () {
+		it("full url - as restangular", inject(function() {
 			configureTranslate([
 				{key: "httperrors.GET.[hello.state].405.http://mock.url/api/v1/members/{memberId}/other", reject: true},
 				{key: "httperrors.GET.[hello.state].405.~/members/{memberId}/other", reject: true},
@@ -274,7 +274,7 @@ describe("SeAjaxDisplayRequestErrorsService", function () {
 			]);
 			expectBehaviour("GET", "http://mock.url/api/v1/members/55/other", 405, EXPECTED_TRANSLATION.UNKNOWN);
 		}));
-		it("full url - not as restangular", inject(function () {
+		it("full url - not as restangular", inject(function() {
 			configureTranslate([
 				{key: "httperrors.GET.[hello.state].405.http://hello.url/api/v1/members/{memberId}/other", reject: true},
 				{key: "httperrors.GET.405.http://hello.url/api/v1/members/{memberId}/other", reject: true},
