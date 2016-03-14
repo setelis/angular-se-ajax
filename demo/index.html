@@ -32,6 +32,8 @@
 		<div class="notifications se-animation-showhide" data-se-notifications data-se-notifications-position="BAR"></div>
 		<button type="button" data-ng-click="demoCtrl.doPost()">Try to double click - not possible</button>
 		<button type="button" data-ng-click="demoCtrl.get404()">Get resource that does not exist</button>
+		<button type="button" data-ng-click="demoCtrl.doPostWithoutDoubleClickPrevention()">Create resource without blocking double click</button>
+
 
 		<div class="panel-body" data-se-loading="demoCtrl.post">
 			<div class="form-group">
