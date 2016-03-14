@@ -1,4 +1,4 @@
-angular.module("seAjaxDemoApp", ["seAjax", "restangular", "seNotifications"]).controller("DemoCtrl", function (SeNotificationsService, Restangular) {
+angular.module("seAjaxDemoApp", ["seAjax", "restangular", "seNotifications"]).controller("DemoCtrl", function (SeAjaxPreventDoubleClickService, SeNotificationsService, Restangular) {
 	"use strict";
 	var controller = this;
 
@@ -13,6 +13,9 @@ angular.module("seAjaxDemoApp", ["seAjax", "restangular", "seNotifications"]).co
 		};
 		controller.get404 = function() {
 			Restangular.one("notfound", 1).get();
+		};
+		controller.doPostWithoutDoubleClickPrevention = function() {
+			SeAjaxPreventDoubleClickService.restangularWithoutDoubleClickPrevention(Restangular.all("posts")).post({some: "data"});
 		};
 	}
 

@@ -1,4 +1,4 @@
-angular.module("seAjax.sniffer", []).service("SeAjaxRequestsSnifferService", function($rootScope){
+angular.module("seAjax.sniffer", []).service("SeAjaxRequestsSnifferService", function($rootScope) {
 	"use strict";
 
 	var service = this;
@@ -52,7 +52,7 @@ angular.module("seAjax.sniffer", []).service("SeAjaxRequestsSnifferService", fun
 			return $q.reject(rejection);
 		}
 	};
-}).config(function ($httpProvider) {
+}).config(function($httpProvider) {
 	"use strict";
 	$httpProvider.interceptors.push("SeAjaxRequestsSnifferInterceptor");
 });

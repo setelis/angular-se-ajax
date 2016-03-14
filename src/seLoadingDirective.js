@@ -1,4 +1,4 @@
-angular.module("seAjax.loading", []).directive("seLoading", function ($parse, $timeout) {
+angular.module("seAjax.loading", []).directive("seLoading", function($parse, $timeout) {
 	"use strict";
 	var CLASS_NAME = "se-loading";
 	var TIMEOUT = 500;

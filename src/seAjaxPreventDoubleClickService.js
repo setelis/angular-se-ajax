@@ -1,6 +1,6 @@
 //based on http://codingsmackdown.tv/blog/2013/04/20/using-response-interceptors-to-show-and-hide-a-loading-widget-redux/
 // blur is based on http://stackoverflow.com/questions/9416556/jquery-how-to-disable-the-entire-page
-angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventDoubleClickService", function (SeAjaxRequestsSnifferService, $rootScope) {
+angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventDoubleClickService", function(SeAjaxRequestsSnifferService, $rootScope) {
 	"use strict";
 	var service = this;
 
@@ -36,15 +36,20 @@ angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventD
 			modal.dialog("close");
 			modal = null;
 		}
-
+		function isRequestWithoutDoubleClickPrevention(config) {
+			if (config.$$SeAjaxPreventDoubleClickService && config.$$SeAjaxPreventDoubleClickService.withoutDoubleClickPrevention === true) {
+				return true;
+			}
+			return false;
+		}
 		function checkRequestStarted(config) {
-			if (config.method === "GET") {
+			if (config.method === "GET" || isRequestWithoutDoubleClickPrevention(config)) {
 				return;
 			}
 			service.requestStarted();
 		}
 		function checkRequestEnded(response) {
-			if (response.config && response.config.method === "GET") {
+			if ((response.config && response.config.method === "GET") || isRequestWithoutDoubleClickPrevention(response.config)) {
 				return;
 			}
 			service.requestEnded();
@@ -77,6 +82,10 @@ angular.module("seAjax.doubleclick", ["seAjax.sniffer"]).service("SeAjaxPreventD
 		SeAjaxRequestsSnifferService.onRequestStarted($rootScope, checkRequestStarted);
 		SeAjaxRequestsSnifferService.onRequestSuccess($rootScope, checkRequestEnded);
 		SeAjaxRequestsSnifferService.onRequestError($rootScope, checkRequestEnded);
+	};
+
+	service.restangularWithoutDoubleClickPrevention = function(restangularizedElement) {
+		return restangularizedElement.withHttpConfig({$$SeAjaxPreventDoubleClickService: {withoutDoubleClickPrevention: true}});
 	};
 }).run(function(SeAjaxPreventDoubleClickService) {
 	"use strict";
