@@ -7,6 +7,7 @@ angular.module("seAjax.translations.bg", ["pascalprecht.translate"]).config(func
 		"httperrors.404": "Информацията не съществува",
 		"httperrors.500": "Възникна грешка, моля презаредете страницата.",
 		"httperrors.0": "Проверете Вашата Интернет свързаност",
+		"httperrors.-1": "Заявката беше прекратена",
 		"httperrors.unknown": "Възникна грешка, моля презаредете страницата."
 	});
 });
